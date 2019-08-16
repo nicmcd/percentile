@@ -30,6 +30,7 @@
 """
 
 import numpy as np
+import sys
 from numpy import ma
 from matplotlib import scale as mscale
 from matplotlib import transforms as mtransforms
@@ -40,7 +41,10 @@ class PercentileScale(mscale.ScaleBase):
   name = 'percentile'
 
   def __init__(self, axis, **kwargs):
-    mscale.ScaleBase.__init__(self)
+    if (sys.modules[mscale.__package__].__version__) >= "3.1.0":
+      mscale.ScaleBase.__init__(self, axis)
+    else:
+      mscale.ScaleBase.__init__(self)
     self.nines = kwargs.get('nines', 5)
 
   def get_transform(self):
